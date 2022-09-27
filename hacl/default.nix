@@ -8,15 +8,14 @@ let
 
     inherit src;
 
-    patches = [ ./Makefile.patch ];
-
     postPatch = ''
       patchShebangs tools
       patchShebangs dist/configure
       substituteInPlace Makefile --replace "NOSHORTLOG=1" ""
+      substituteInPlace Makefile --replace "test-wasm test-bindings-ocaml" "test-wasm"
+      substituteInPlace Makefile --replace "doc-wasm doc-ocaml" "doc-wasm"
       echo "0.3.19" > vale/.vale_version
     '';
-      #substituteInPlace Makefile --replace "/usr/bin/time" "`which time`"
 
     nativeBuildInputs = [ z3 fstar python3 which dotnet-runtime time nodejs nodePackages.jsdoc ]
       ++ (with ocamlPackages; [
