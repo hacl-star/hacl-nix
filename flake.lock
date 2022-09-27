@@ -17,11 +17,11 @@
     "fstar-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1663902866,
-        "narHash": "sha256-ROTTcWe9TVblNnPHFyYBM8XS9toRP7g2ZIrzNhcC23E=",
+        "lastModified": 1664230426,
+        "narHash": "sha256-maXZw96DvtJLtlztayigE4d0VYLkNVLAgR3kjL2joS4=",
         "owner": "fstarlang",
         "repo": "fstar",
-        "rev": "5e64ee08d484f5394785954e85483336053610ca",
+        "rev": "9f2cb7e2c9934b0134b46d5c83a5a5c074d8463b",
         "type": "github"
       },
       "original": {
