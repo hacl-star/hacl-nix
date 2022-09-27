@@ -1,5 +1,5 @@
 { enableParallelBuilding ? true, dotnet-runtime, ocamlPackages, python3, stdenv
-, which, writeTextFile, time, z3, fstar, karamel, vale, mlcrypto, nodejs, nodePackages, src }:
+, which, writeTextFile, time, z3, fstar, karamel, vale, nodejs, nodePackages, src }:
 
 let
 
@@ -32,7 +32,6 @@ let
         ctypes
       ]);
 
-    MLCRYPTO_HOME = mlcrypto;
     VALE_HOME = vale;
     FSTAR_HOME = fstar;
     KRML_HOME = karamel;

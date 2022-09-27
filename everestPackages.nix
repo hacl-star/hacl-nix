@@ -3,7 +3,6 @@
 let
   ocamlPackages = pkgs.ocaml-ng.ocamlPackages_4_12;
   everestPackages = rec {
-    mlcrypto = pkgs.callPackage ./mlcrypto { };
     z3 = pkgs.callPackage ./z3 { };
     fstar = pkgs.callPackage ./fstar {
       inherit ocamlPackages z3;
@@ -15,7 +14,7 @@ let
     };
     vale = pkgs.callPackage ./vale { };
     hacl = pkgs.callPackage ./hacl {
-      inherit ocamlPackages z3 fstar karamel vale mlcrypto;
+      inherit ocamlPackages z3 fstar karamel vale;
       src = hacl-src;
     };
   };
