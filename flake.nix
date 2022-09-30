@@ -32,6 +32,7 @@
         packages = everestPackages // { default = everestPackages.hacl; };
         hydraJobs = everestPackages // {
           hacl-build-products = packages.hacl.passthru.build-products;
+          hacl-stats = packages.hacl.passthru.stats;
         };
       });
 }

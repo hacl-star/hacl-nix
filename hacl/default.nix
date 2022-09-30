@@ -46,11 +46,10 @@ let
 
     inherit enableParallelBuilding;
 
-    preBuild = ''
+    buildPhase = ''
       rm -rf dist/*/*
+      make -j$NIX_BUILD_CORES ci 2>&1 | tee log.txt
     '';
-
-    buildFlags = [ "ci" ];
 
     installPhase = ''
       cp -r ./. $out
@@ -105,6 +104,18 @@ let
           echo "file hints $out/hints.tar" >> $out/nix-support/hydra-build-products
           echo "file dist $out/dist.tar" >> $out/nix-support/hydra-build-products
           echo "file rev $out/rev.txt" >> $out/nix-support/hydra-build-products
+        '';
+      };
+      stats = stdenv.mkDerivation {
+        name = "hacl-stats";
+        phases = [ "installPhase" ];
+        installPhase = ''
+          mkdir -p $out/nix-support
+          echo "file stats $out/stats.txt" >> $out/nix-support/hydra-build-products
+          cat ${hacl}/log.txt \
+              | grep "^\[VERIFY\]" \
+              | sed -s 's/\[VERIFY\] \(.*\), \(.*\)/\2 \1/' \
+              | sort -rg - > $out/stats.txt
         '';
       };
     };
