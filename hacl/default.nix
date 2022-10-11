@@ -67,6 +67,39 @@ let
           Vale version: ${vale.version}
         '';
       };
+      dist-compare = stdenv.mkDerivation {
+        name = "hacl-diff-compare";
+        src = "${hacl.build-products}/dist.tar";
+        buildPhase = ''
+          for file in ./*/*.c ./*/*.h
+          do
+            if ! diff $file ${hacl.src}/dist/$file 2>&1 > /dev/null
+            then
+              echo "*** $file"
+              diff -y --suppress-common-lines $file ${hacl.src}/dist/$file || true
+            fi
+          done
+        '';
+        installPhase = ''
+          touch $out
+        '';
+      };
+      dist-list = stdenv.mkDerivation {
+        name = "hacl-diff-list";
+        src = "${hacl.build-products}/dist.tar";
+        buildPhase = ''
+          diff -rq . ${hacl.src}/dist 2>&1 \
+            | sed 's/\/nix\/store\/[a-z0-9]\{32\}-//g' \
+            | sed 's/^Files \([^ ]*\).*/\1/' \
+            | sed 's/^Only in source\/dist\([^\:]*\)\: \(.*\)/\.\1\/\2/' \
+            | sed 's/^Only in \.\([^\:]*\)\: \(.*\)/\.\1\/\2/' \
+            | grep '\.\/[^\/]*\/' \
+            | grep -v INFO.txt
+        '';
+        installPhase = ''
+          touch $out
+        '';
+      };
       build-products = stdenv.mkDerivation {
         name = "hacl-build-products";
         phases = [ "installPhase" ];
@@ -97,6 +130,8 @@ let
             --exclude='*.exe' \
             --exclude='*.o' \
             --exclude='*.so' \
+            --exclude='**/lib/*_stubs.ml' \
+            --exclude='**/lib/*_c_stubs.c' \
             dist/*/*
           echo ${src.rev} > $out/rev.txt
 
@@ -114,7 +149,7 @@ let
           echo "file stats $out/stats.txt" >> $out/nix-support/hydra-build-products
           cat ${hacl}/log.txt \
               | grep "^\[VERIFY\]" \
-              | sed -s 's/\[VERIFY\] \(.*\), \(.*\)/\2 \1/' \
+              | sed 's/\[VERIFY\] \(.*\), \(.*\)/\2 \1/' \
               | sort -rg - > $out/stats.txt
         '';
       };

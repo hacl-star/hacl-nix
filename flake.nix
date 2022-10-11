@@ -33,6 +33,8 @@
         hydraJobs = everestPackages // {
           hacl-build-products = packages.hacl.passthru.build-products;
           hacl-stats = packages.hacl.passthru.stats;
+          hacl-dist-compare = packages.hacl.passthru.dist-compare;
+          hacl-dist-list = packages.hacl.passthru.dist-list;
         };
       });
 }
