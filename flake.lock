@@ -33,11 +33,11 @@
     "hacl-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1665563645,
-        "narHash": "sha256-XWS2dFAO2E/H7D8ZDN1JNIgfDqdymbfpz5REjTqSs0w=",
+        "lastModified": 1665903744,
+        "narHash": "sha256-TFB17IjRLQTw1EvTzlcQ8Zh380RwGA3bd3CFy0SdnQc=",
         "owner": "hacl-star",
         "repo": "hacl-star",
-        "rev": "79046983d7e8d676f4dccd6dddc89851e737fbba",
+        "rev": "d35033a7ffd88d8ace49dedddf607d5aa2be019d",
         "type": "github"
       },
       "original": {
