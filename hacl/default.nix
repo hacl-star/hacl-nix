@@ -1,6 +1,6 @@
 { enableParallelBuilding ? true, dotnet-runtime, ocamlPackages, python3, stdenv
 , which, writeTextFile, time, z3, fstar, karamel, vale, nodejs, nodePackages
-, openssl, src }:
+, openssl, git, src }:
 
 let
 
@@ -70,6 +70,7 @@ let
       dist-compare = stdenv.mkDerivation {
         name = "hacl-diff-compare";
         src = "${hacl.build-products}/dist.tar";
+        phases = [ "unpackPhase" "buildPhase" "installPhase" ];
         buildPhase = ''
           for file in ./*/*.c ./*/*.h
           do
@@ -87,6 +88,7 @@ let
       dist-list = stdenv.mkDerivation {
         name = "hacl-diff-list";
         src = "${hacl.build-products}/dist.tar";
+        phases = [ "unpackPhase" "buildPhase" "installPhase" ];
         buildPhase = ''
           diff -rq . ${hacl.src}/dist 2>&1 \
             | sed 's/\/nix\/store\/[a-z0-9]\{32\}-//g' \
@@ -102,14 +104,9 @@ let
       };
       build-products = stdenv.mkDerivation {
         name = "hacl-build-products";
-        phases = [ "installPhase" ];
-        installPhase = ''
-          mkdir -p $out
-          cp -r ${hacl}/hints .
-          chmod -R +w hints
-          cp -r ${hacl}/dist .
-          chmod -R +w dist
-
+        src = hacl;
+        buildInputs = [ git ];
+        buildPhase = ''
           for target in c89-compatible election-guard gcc-compatible gcc64-only msvc-compatible portable-gcc-compatible
           do
             sed -i 's/\#\!.*/\#\!\/usr\/bin\/env bash/' dist/$target/configure
@@ -120,22 +117,19 @@ let
             cp ${info} dist/$target/INFO.txt
           done
 
-          tar -cvf $out/hints.tar hints/
-          tar -cvf $out/dist.tar \
-            --exclude='*.a' \
-            --exclude='*.cmi' \
-            --exclude='*.cmx' \
-            --exclude='*.cmxa' \
-            --exclude='*.d' \
-            --exclude='*.exe' \
-            --exclude='*.o' \
-            --exclude='*.so' \
-            --exclude='**/lib/*_stubs.ml' \
-            --exclude='**/lib/*_c_stubs.c' \
-            dist/*/*
-          echo ${src.rev} > $out/rev.txt
+          git init
+          git config --local user.name "John Doe"
+          git config --local user.email johndoe@example.com
+          git add *
+          git commit -m "initial commit"
 
+          git archive HEAD hints > hints.tar
+          git archive HEAD dist/* > dist.tar
+          echo ${src.rev} > rev.txt
+        '';
+        installPhase = ''
           mkdir -p $out/nix-support
+          cp hints.tar dist.tar rev.txt $out
           echo "file hints $out/hints.tar" >> $out/nix-support/hydra-build-products
           echo "file dist $out/dist.tar" >> $out/nix-support/hydra-build-products
           echo "file rev $out/rev.txt" >> $out/nix-support/hydra-build-products
