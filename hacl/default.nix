@@ -88,17 +88,21 @@ let
       dist-list = stdenv.mkDerivation {
         name = "hacl-diff-list";
         src = "${hacl.build-products}/dist.tar";
-        phases = [ "unpackPhase" "buildPhase" ];
+        phases = [ "unpackPhase" "buildPhase" "installPhase" ];
         buildPhase = ''
-          touch $out
+          mkdir $out
           diff -rq . ${hacl.src}/dist 2>&1 \
             | sed 's/\/nix\/store\/[a-z0-9]\{32\}-//g' \
             | sed 's/^Files \([^ ]*\).*/\1/' \
             | sed 's/^Only in source\/dist\([^\:]*\)\: \(.*\)/\.\1\/\2/' \
             | sed 's/^Only in \.\([^\:]*\)\: \(.*\)/\.\1\/\2/' \
             | grep '\.\/[^\/]*\/' \
-            | grep -v INFO.txt >> $out || true
-          ! [ -s $out ]
+            | grep -v INFO.txt \
+            | tee diff.txt || true
+          ! [ -s diff.txt ]
+        '';
+        installPhase = ''
+          touch $out
         '';
       };
       build-products = stdenv.mkDerivation {
