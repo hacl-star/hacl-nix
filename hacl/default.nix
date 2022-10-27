@@ -1,6 +1,6 @@
 { enableParallelBuilding ? true, dotnet-runtime, ocamlPackages, python3, stdenv
 , which, writeTextFile, time, z3, fstar, karamel, vale, nodejs, nodePackages
-, openssl, git, src }:
+, openssl, git, dune_3, src }:
 
 let
 
@@ -18,21 +18,30 @@ let
       echo "0.3.19" > vale/.vale_version
     '';
 
-    nativeBuildInputs =
-      [ z3 fstar python3 which dotnet-runtime time nodejs nodePackages.jsdoc ]
-      ++ (with ocamlPackages; [
-        ocaml
-        findlib
-        batteries
-        pprint
-        stdint
-        yojson
-        zarith
-        ppxlib
-        ppx_deriving
-        ppx_deriving_yojson
-        ctypes
-      ]);
+    nativeBuildInputs = [
+      z3
+      fstar
+      python3
+      which
+      dotnet-runtime
+      time
+      nodejs
+      nodePackages.jsdoc
+      dune_3
+    ] ++ (with ocamlPackages; [
+      ocaml
+      findlib
+      batteries
+      pprint
+      stdint
+      yojson
+      zarith
+      ppxlib
+      ppx_deriving
+      ppx_deriving_yojson
+      ctypes
+      alcotest
+    ]);
 
     buildInputs = [ openssl.dev ];
 
@@ -42,6 +51,10 @@ let
 
     configurePhase = ''
       export HACL_HOME=$(pwd)
+
+      export OCAMLPATH=$HACL_HOME/dist:$OCAMLPATH
+      export OCAMLFIND_OPTS="-destdir $HACL_HOME/dist"
+      export LD_LIBRARY_PATH=$HACL_HOME/dist/hacl-star-raw
     '';
 
     inherit enableParallelBuilding;
@@ -110,12 +123,12 @@ let
         src = hacl;
         buildInputs = [ git ];
         buildPhase = ''
-          for target in c89-compatible election-guard gcc-compatible gcc64-only msvc-compatible portable-gcc-compatible
+          for target in election-guard gcc-compatible gcc64-only msvc-compatible portable-gcc-compatible
           do
             sed -i 's/\#\!.*/\#\!\/usr\/bin\/env bash/' dist/$target/configure
           done
 
-          for target in c89-compatible election-guard gcc-compatible gcc64-only merkle-tree mozilla msvc-compatible portable-gcc-compatible wasm
+          for target in election-guard gcc-compatible gcc64-only merkle-tree mozilla msvc-compatible portable-gcc-compatible wasm
           do
             cp ${info} dist/$target/INFO.txt
           done
@@ -128,14 +141,12 @@ let
 
           git archive HEAD hints > hints.tar
           git archive HEAD dist/*/ > dist.tar
-          echo ${src.rev} > rev.txt
         '';
         installPhase = ''
           mkdir -p $out/nix-support
-          cp hints.tar dist.tar rev.txt $out
+          cp hints.tar dist.tar $out
           echo "file hints $out/hints.tar" >> $out/nix-support/hydra-build-products
           echo "file dist $out/dist.tar" >> $out/nix-support/hydra-build-products
-          echo "file rev $out/rev.txt" >> $out/nix-support/hydra-build-products
         '';
       };
       stats = stdenv.mkDerivation {
