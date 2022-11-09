@@ -1,4 +1,4 @@
-name: update projects/flake.lock
+name: update flake.lock
 
 on:
   schedule:
