@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v3
       - name: update flake.lock
         run: |
-          nix flake lock --update-input fstar-src --update-input karamel-src --update-input hacl-src
+          nix flake lock --update-input fstar-src --update-input karamel-src
           [[ $(git diff flake.lock) != "" ]] || exit 0
           git config --local user.name "Hacl Bot"
           git config --local user.email "hacl-star@mailo.com"

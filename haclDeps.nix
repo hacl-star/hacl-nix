@@ -1,8 +1,8 @@
-{ pkgs, fstar-src, karamel-src, hacl-src }:
+{ pkgs, fstar-src, karamel-src }:
 
 let
   ocamlPackages = pkgs.ocaml-ng.ocamlPackages_4_12;
-  everestPackages = rec {
+  haclDeps = rec {
     z3 = pkgs.callPackage ./z3 { };
     fstar = pkgs.callPackage ./fstar {
       inherit ocamlPackages z3;
@@ -13,9 +13,5 @@ let
       src = karamel-src;
     };
     vale = pkgs.callPackage ./vale { };
-    hacl = pkgs.callPackage ./hacl {
-      inherit ocamlPackages z3 fstar karamel vale;
-      src = hacl-src;
-    };
   };
-in everestPackages
+in haclDeps

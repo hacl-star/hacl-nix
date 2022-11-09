@@ -30,22 +30,6 @@
         "type": "github"
       }
     },
-    "hacl-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1667233774,
-        "narHash": "sha256-OFfl4ZCcARiC6yZxj8z6sR2RbkK6hJ5GmFNujgwCw48=",
-        "owner": "hacl-star",
-        "repo": "hacl-star",
-        "rev": "f6df93a6edf59d665a0ff9086087c6d32a097385",
-        "type": "github"
-      },
-      "original": {
-        "owner": "hacl-star",
-        "repo": "hacl-star",
-        "type": "github"
-      }
-    },
     "karamel-src": {
       "flake": false,
       "locked": {
@@ -81,7 +65,6 @@
       "inputs": {
         "flake-utils": "flake-utils",
         "fstar-src": "fstar-src",
-        "hacl-src": "hacl-src",
         "karamel-src": "karamel-src",
         "nixpkgs": "nixpkgs"
       }
