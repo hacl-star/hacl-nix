@@ -1,4 +1,4 @@
-name: merge lock files
+name: merge lock file
 
 on:
   schedule:
