@@ -17,11 +17,11 @@
     "fstar-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1668549455,
-        "narHash": "sha256-WHgHYmeWwy3RfIE2pkOyLTpkhi8FXL83zO8Tv2N9Iic=",
+        "lastModified": 1668621500,
+        "narHash": "sha256-/6Lr0W5/7p9hs/ZYXrpDVUwSLUr4BJwEexnG+IADgV4=",
         "owner": "fstarlang",
         "repo": "fstar",
-        "rev": "2040a595ed2faff0a1dce782fefbb518102eb1dd",
+        "rev": "d063248f36ca4f58a4d8362b631ed9e775cb2f40",
         "type": "github"
       },
       "original": {
@@ -63,11 +63,11 @@
     "karamel-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1668034772,
-        "narHash": "sha256-1Z3is1g0qhrn4eKFepXxD1fPhcPVIB02rAihMUU5zyc=",
+        "lastModified": 1668626477,
+        "narHash": "sha256-SxZE2m7UHui9js8hOcCzpt89OzZjxzE4E2GjVCI1HmA=",
         "owner": "fstarlang",
         "repo": "karamel",
-        "rev": "55b36e2c06b99f735283062e74f826d3088c2697",
+        "rev": "336a57a44aec823a78808886ac9100ef469b0021",
         "type": "github"
       },
       "original": {
