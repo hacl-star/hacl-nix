@@ -1,8 +1,8 @@
 { stdenv, lib, makeWrapper, which, ocamlPackages, sd, sphinx, python39Packages
-, z3, src }@inputs:
+, z3, src, fetchFromGitHub }@inputs:
 let
   inherit (import ./fstar-factory.nix {
-    inherit stdenv lib makeWrapper which ocamlPackages sd;
+    inherit stdenv lib makeWrapper which ocamlPackages sd fetchFromGitHub;
     z3 = z3;
   })
     binary-of-fstar check-fstar;
