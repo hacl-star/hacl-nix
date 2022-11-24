@@ -33,11 +33,39 @@ OCaml; F* source trees are assumed to provide an OCaml snapshot (in
  • [compileULib]     (defaults to [true] )
       Wether F*'s [ulib] OCaml library is built & installed
 */
-{ stdenv, lib, makeWrapper, which, z3, ocamlPackages, sd, ... }:
-let
+{ stdenv, lib, makeWrapper, which, z3, ocamlPackages, sd, fetchFromGitHub, ... }:
+let ocamlPackages2 =
+  ocamlPackages.overrideScope' (self: super: {
+    ppxlib = super.ppxlib.override {
+      version = if lib.versionAtLeast self.ocaml.version "4.07"
+                then if lib.versionAtLeast self.ocaml.version "4.08"
+                     then "0.24.0" else "0.15.0" else "0.13.0";
+    };
+    ppx_deriving_yojson = super.ppx_deriving_yojson.overrideAttrs (oldAttrs
+: rec {
+      version = "3.6.1";
+      src = fetchFromGitHub {
+        owner = "ocaml-ppx";
+        repo = "ppx_deriving_yojson";
+        rev = "v${version}";
+        sha256 = "1icz5h6p3pfj7my5gi7wxpflrb8c902dqa17f9w424njilnpyrbk";
+      };
+    });
+    sedlex = super.sedlex.overrideAttrs (oldAttrs: rec {
+      version = "2.5";
+      src = fetchFromGitHub {
+        owner = "ocaml-community";
+        repo = "sedlex";
+        rev = "v${version}";
+        sha256 = "sha256:062a5dvrzvb81l3a9phljrhxfw9nlb61q341q0a6xn65hll3z2
+wy";
+      };
+    });
+  });
+
   /* Following [https://github.com/FStarLang/FStar/blob/master/fstar.opam],
      [ocamlBuildInputs] is the list of OCaml packages necessary to build F* snapshots. */
-  ocamlNativeBuildInputs = with ocamlPackages; [ ocaml ocamlbuild findlib menhir ];
+  ocamlNativeBuildInputs = with ocamlPackages2; [ ocaml ocamlbuild findlib menhir ];
   ocamlBuildInputs = with ocamlPackages; [
     batteries zarith stdint yojson fileutils
     menhirLib pprint sedlex ppxlib
