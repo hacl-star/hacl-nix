@@ -8,7 +8,7 @@ let
     binary-of-fstar check-fstar;
   pname = "fstar";
   rev = src.rev;
-  bin = binary-of-fstar { inherit src pname rev; };
+  bin = (binary-of-fstar { inherit src pname; version = src.rev; }).override (_: {name = "fstar-master";});
 in bin // {
   passthru = {
     tests = check-fstar {

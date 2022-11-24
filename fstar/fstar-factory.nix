@@ -5,32 +5,32 @@ Those derivations realizes F* bootstraping. F* is bootsrapped via
 OCaml; F* source trees are assumed to provide an OCaml snapshot (in
 [src/ocaml-output]).
 
- - [mlSnapshot-of-fstar]: given an F* source tree [src] and an
-   existing F* binary [existing-fstar], [mlSnapshot-of-fstar {src,
+ - [ml-snapshot-of-fstar]: given an F* source tree [src] and an
+   existing F* binary [existing-fstar], [ml-snapshot-of-fstar {src,
    existing-fstar, ...}] extracts F* sources (written in F*) as an
    OCaml snapshot.
 
- - [binary-of-mlSnapshot]: given an F* source tree [src] and a bunch
-   of build options¹ [opts], [binary-of-mlSnapshot {src, opts, ...}]
+ - [binary-of-ml-snapshot]: given an F* source tree [src] and a bunch
+   of build options[1] [opts], [binary-of-ml-snapshot {src, opts, ...}]
    builds the OCaml snapshot [${src}/src/ocaml-output].
 
  - [binary-of-fstar] is basically the composition
-   [binary-of-mlSnapshot ∘ mlSnapshot-of-fstar ∘ binary-of-mlSnapshot],
+   [binary-of-ml-snapshot ∘ ml-snapshot-of-fstar ∘ binary-of-ml-snapshot],
    that is the full bootrapping of the compiler.
 
-¹: Options are given as a set composed of the following keys:
- • [keepSources]     (defaults to [false])
+[1]: Options are given as a set composed of the following keys:
+ • [keep-sources]     (defaults to [false])
       Whether the folder [src] is kept during [installPhase]
       (keep in mind OCaml snapshots live under [src])
- • [compileFStar]    (defaults to [true] )
+ • [compile-fstar]    (defaults to [true] )
       Wether [bin/fstar.exe] is built
- • [compileBytecode] (defaults to [false])
+ • [compile-bytecode] (defaults to [false])
       Wether [bin/fstar.ocaml] is built
- • [compileTests]    (defaults to [false])
+ • [compile-tests]    (defaults to [false])
       Wether [bin/test.exe] is built
- • [compileCompLib]  (defaults to [true] )
+ • [compile-comp-lib]  (defaults to [true] )
       Wether F*'s compiler OCaml library is built & installed
- • [compileULib]     (defaults to [true] )
+ • [compile-ulib]     (defaults to [true] )
       Wether F*'s [ulib] OCaml library is built & installed
 */
 { stdenv, lib, makeWrapper, which, z3, ocamlPackages, sd, ... }:
@@ -43,34 +43,33 @@ let
     menhirLib pprint sedlex ppxlib
     ppx_deriving ppx_deriving_yojson process
   ];
-  preBuild = {pname,rev}:
-  ''echo "echo ${lib.escapeShellArg pname}-${rev}" > src/tools/get_commit
+  preBuild = {pname, version}:
+  ''echo "echo ${lib.escapeShellArg pname}-${version}" > src/tools/get_commit
     patchShebangs src/tools ulib/gen_mllib.sh bin
-    substituteInPlace src/ocaml-output/Makefile --replace '$(COMMIT)' '${rev}'
+    substituteInPlace src/ocaml-output/Makefile --replace '$(COMMIT)' '${version}'
   '';
   /* Default options */
-  defaults = { keepSources     = false; compileFStar = true ;
-               compileBytecode = false; compileTests = true ;
-               compileCompLib  = true ; compileULib  = true ; };
-  binary-of-mlSnapshot =
-    { src, pname, rev, opts ? {} }: stdenv.mkDerivation (defaults // opts // {
-      inherit src pname;
-      version = rev;
+  defaults = { keep-sources     = false; compile-fstar = true ;
+               compile-bytecode = false; compile-tests = true ;
+               compile-comp-lib = true ; compile-ulib  = true ; };
+  binary-of-ml-snapshot =
+    { src, pname, version, opts ? {} }: stdenv.mkDerivation (defaults // opts // {
+      inherit src pname version;
 
       nativeBuildInputs = [ makeWrapper z3 ] ++ ocamlNativeBuildInputs;
       buildInputs = ocamlBuildInputs;
 
       preBuildPhases = ["preparePhase"];
-      preparePhase = preBuild {inherit pname; inherit rev;};
+      preparePhase = preBuild {inherit pname version;};
 
       # Triggers [make] rules according to [opts] contents
       buildPhase = ''
         MAKE_FLAGS="-j$NIX_BUILD_CORES"
-        [ -z "$compileFStar"    ] || make $MAKE_FLAGS -C src/ocaml-output ../../bin/fstar.exe
-        [ -z "$compileBytecode" ] || make $MAKE_FLAGS -C src/ocaml-output ../../bin/fstar.ocaml
-        [ -z "$compileTests"    ] || make $MAKE_FLAGS -C src/ocaml-output ../../bin/tests.exe
-        [ -z "$compileCompLib"  ] || make $MAKE_FLAGS -C src/ocaml-output install-compiler-lib
-        [ -z "$compileULib"     ] || { make $MAKE_FLAGS -C ulib/ml && make $MAKE_FLAGS -C ulib; }
+        [ -z "$compile-fstar"    ] || make $MAKE_FLAGS -C src/ocaml-output ../../bin/fstar.exe
+        [ -z "$compile-bytecode" ] || make $MAKE_FLAGS -C src/ocaml-output ../../bin/fstar.ocaml
+        [ -z "$compile-tests"    ] || make $MAKE_FLAGS -C src/ocaml-output ../../bin/tests.exe
+        [ -z "$compile-comp-lib" ] || make $MAKE_FLAGS -C src/ocaml-output install-compiler-lib
+        [ -z "$compile-ulib"     ] || { make $MAKE_FLAGS -C ulib/ml && make $MAKE_FLAGS -C ulib; }
       '';
 
       OCAML_VERSION = ocamlPackages.ocaml.version;
@@ -87,13 +86,13 @@ let
                    }
         mkdir $out/{,ulib,bin}
         cp -r ./ulib/ $out/
-        [ -z "$compileFStar"    ] || copyBin fstar.exe
-        [ -z "$compileBytecode" ] || copyBin fstar.ocaml
-        [ -z "$compileTests"    ] || copyBin tests.exe
-        [ -z "$keepSources"     ] || cp -r ./src/ $out/
-        [ -z "$compileULib"     ] || { instLib fstarlib
-                                       instLib fstar-tactics-lib ; }
-        [ -z "$compileCompLib"  ] || { instLib fstar-compiler-lib; }
+        [ -z "$compile-fstar"    ] || copyBin fstar.exe
+        [ -z "$compile-bytecode" ] || copyBin fstar.ocaml
+        [ -z "$compile-tests"    ] || copyBin tests.exe
+        [ -z "$keep-sources"     ] || cp -r ./src/ $out/
+        [ -z "$compile-ulib"     ] || { instLib fstarlib
+                                        instLib fstar-tactics-lib ; }
+        [ -z "$compile-comp-lib" ] || { instLib fstar-compiler-lib; }
       '';
 
       dontFixup = true;
@@ -102,14 +101,13 @@ let
     });
   # Helper derivation that prepares an F* source tree with an existing F* binary/
   with-existing-fstar = {
-    src, pname, rev, existing-fstar, patches ? [],
+    src, pname, version, existing-fstar, patches ? [],
   }: stdenv.mkDerivation {
-    inherit pname src patches;
-    version = rev;
+    inherit pname src patches version;
     EX_FSTAR = existing-fstar;
     nativeBuildInputs = [z3 which existing-fstar];
     preBuildPhases = ["preparePhase" "copyBinPhase"];
-    preparePhase = preBuild {inherit pname rev;};
+    preparePhase = preBuild {inherit pname version;};
     copyBinPhase = ''
       cd bin
       # Next line is required when building F* before commit [6dbcdc1bce]
@@ -123,7 +121,7 @@ let
     '';
     dontFixup = true;
   };
-  mlSnapshot-of-fstar = opts: (with-existing-fstar opts).overrideAttrs (o: {
+  ml-snapshot-of-fstar = opts: (with-existing-fstar opts).overrideAttrs (o: {
     buildFlags = [ "ocaml" "-C" "src" ];
     installPhase = ''cp -r . $out'';
   });
@@ -144,26 +142,25 @@ let
     buildInputs = ocamlBuildInputs;
   });
   binary-of-fstar =
-    { src, pname, rev
+    { src, pname, version
     , patches ? []
-    , existing-fstar ? binary-of-mlSnapshot { inherit src;
+    , existing-fstar ? binary-of-ml-snapshot { inherit src version;
                                               pname = "${pname}-bootstrap";
-                                              inherit rev;
                                               opts = {
-                                                compileULib    = false;
-                                                compileCompLib = false;
+                                                compile-ulib     = false;
+                                                compile-comp-lib = false;
                                               };
                                             }
     , opts ? defaults
     }:
-    binary-of-mlSnapshot {
-      inherit pname rev opts;
-      src = mlSnapshot-of-fstar {
+    binary-of-ml-snapshot {
+      inherit pname version opts;
+      src = ml-snapshot-of-fstar {
         inherit src existing-fstar patches;
-        pname = "${pname}-mlSnapshot";
-        inherit rev;
+        pname = "${pname}-ml-snapshot";
+        inherit version;
       };
     };
-in { inherit binary-of-fstar mlSnapshot-of-fstar binary-of-mlSnapshot check-fstar
+in { inherit binary-of-fstar ml-snapshot-of-fstar binary-of-ml-snapshot check-fstar
              with-existing-fstar ocamlBuildInputs ocamlNativeBuildInputs;
    }
