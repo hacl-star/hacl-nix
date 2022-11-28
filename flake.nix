@@ -28,8 +28,6 @@
     flake-utils.lib.eachSystem [ "x86_64-linux" ] (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        inherit (pkgs.lib)
-          mapAttrs mapAttrs' mapAttrsToList nameValuePair filterAttrs foldAttrs;
         haclDeps =
           import ./haclDeps.nix { inherit pkgs fstar-src karamel-src; };
         haclPackages = haclDeps // { inherit (hacl.packages.${system}) hacl; };
