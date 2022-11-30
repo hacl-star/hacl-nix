@@ -12,7 +12,7 @@
     };
     flake-utils.url = "flake-utils";
     nixpkgs.url = "nixpkgs/nixos-unstable";
-    hacl = {
+    hacl-star = {
       url = "github:hacl-star/hacl-star";
       inputs = {
         fstar-src.follows = "fstar-src";
@@ -24,13 +24,14 @@
     };
   };
 
-  outputs = { self, fstar-src, karamel-src, flake-utils, nixpkgs, hacl }:
+  outputs = { self, fstar-src, karamel-src, flake-utils, nixpkgs, hacl-star }:
     flake-utils.lib.eachSystem [ "x86_64-linux" ] (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
         haclDeps =
           import ./haclDeps.nix { inherit pkgs fstar-src karamel-src; };
-        haclPackages = haclDeps // { inherit (hacl.packages.${system}) hacl; };
+        inherit (hacl-star.packages.${system}) hacl;
+        haclPackages = haclDeps // { inherit hacl; };
       in rec {
         packages = haclPackages // { default = haclPackages.hacl; };
         hydraJobs = haclPackages;
