@@ -17,11 +17,11 @@
     "fstar-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1671324205,
-        "narHash": "sha256-J2/JTWdIAvQnTqORzis8WRgkvjdHEqL/kVqvOHAQ1F0=",
+        "lastModified": 1671493246,
+        "narHash": "sha256-P5YM/GbwtP25P1jD6MDYNicRw3frlhRyjzC0+ck6hBI=",
         "owner": "fstarlang",
         "repo": "fstar",
-        "rev": "76c48581b109513e8da5155a3664bceda0620847",
+        "rev": "dc91d61524e2296c7dbd02a5193611c093342760",
         "type": "github"
       },
       "original": {
@@ -47,11 +47,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1671181078,
-        "narHash": "sha256-eYTfxmbuRUUDvy9QJ0ZWyiQpRR+BtITnYwZk7RilYEE=",
+        "lastModified": 1671476159,
+        "narHash": "sha256-mvJKXaT52GXt237tNEc2FQIBz+gJgVJKn4FWc8TXQiU=",
         "owner": "hacl-star",
         "repo": "hacl-star",
-        "rev": "fe86e6ce2432beb9ffdeab44b4715aa8bd6c5a06",
+        "rev": "3c57666990a3723717236a176c70adad332e83c4",
         "type": "github"
       },
       "original": {
