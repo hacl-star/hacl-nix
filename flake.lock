@@ -14,41 +14,11 @@
         "type": "indirect"
       }
     },
-    "flake-utils_2": {
-      "locked": {
-        "lastModified": 1667395993,
-        "narHash": "sha256-nuEHfE/LcWyuSWnS8t12N1wc105Qtau+/OdUAjtQ0rA=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "5aed5285a952e0b949eb3ba02c12fa4fcfef535f",
-        "type": "github"
-      },
-      "original": {
-        "id": "flake-utils",
-        "type": "indirect"
-      }
-    },
     "fstar": {
       "inputs": {
-        "flake-utils": "flake-utils_2",
+        "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs"
       },
-      "locked": {
-        "lastModified": 1677018370,
-        "narHash": "sha256-OvEy4lgPGkQZGaEmj9fOeyxvsssdWpGetvdTK2H0Ij0=",
-        "owner": "fstarlang",
-        "repo": "fstar",
-        "rev": "eb911fc41d5ba730c15f2ac296ffc5ebf7b46560",
-        "type": "github"
-      },
-      "original": {
-        "owner": "fstarlang",
-        "repo": "fstar",
-        "type": "github"
-      }
-    },
-    "fstar-src": {
-      "flake": false,
       "locked": {
         "lastModified": 1677018370,
         "narHash": "sha256-OvEy4lgPGkQZGaEmj9fOeyxvsssdWpGetvdTK2H0Ij0=",
@@ -68,7 +38,9 @@
         "flake-utils": [
           "flake-utils"
         ],
-        "fstar": "fstar",
+        "fstar": [
+          "fstar"
+        ],
         "karamel-src": [
           "karamel-src"
         ],
@@ -121,28 +93,19 @@
         "type": "indirect"
       }
     },
-    "nixpkgs_2": {
-      "locked": {
-        "lastModified": 1669140675,
-        "narHash": "sha256-npzfyfLECsJWgzK/M4gWhykP2DNAJTYjgY2BWkz/oEQ=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "2788904d26dda6cfa1921c5abb7a2466ffe3cb8c",
-        "type": "github"
-      },
-      "original": {
-        "id": "nixpkgs",
-        "ref": "nixos-unstable",
-        "type": "indirect"
-      }
-    },
     "root": {
       "inputs": {
-        "flake-utils": "flake-utils",
-        "fstar-src": "fstar-src",
+        "flake-utils": [
+          "fstar",
+          "flake-utils"
+        ],
+        "fstar": "fstar",
         "hacl": "hacl",
         "karamel-src": "karamel-src",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": [
+          "fstar",
+          "nixpkgs"
+        ]
       }
     }
   },

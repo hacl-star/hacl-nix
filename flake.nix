@@ -2,37 +2,32 @@
   description = "Hacl*";
 
   inputs = {
-    fstar-src = {
-      url = "github:fstarlang/fstar";
-      flake = false;
-    };
+    fstar.url = "github:fstarlang/fstar";
+    flake-utils.follows = "fstar/flake-utils";
+    nixpkgs.follows = "fstar/nixpkgs";
     karamel-src = {
       url = "github:fstarlang/karamel";
       flake = false;
     };
-    flake-utils.url = "flake-utils";
-    nixpkgs.url = "nixpkgs/nixos-unstable";
     hacl = {
       url = "github:hacl-star/hacl-star";
       inputs = {
-        fstar-src.follows = "fstar-src";
-        karamel-src.follows = "karamel-src";
-        hacl-nix.follows = "/";
+        fstar.follows = "fstar";
         flake-utils.follows = "flake-utils";
         nixpkgs.follows = "nixpkgs";
+        karamel-src.follows = "karamel-src";
       };
     };
   };
 
-  outputs = { self, fstar-src, karamel-src, flake-utils, nixpkgs, hacl }:
+  outputs = { flake-utils, hacl, ... }:
     flake-utils.lib.eachSystem [ "x86_64-linux" ] (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
-        haclDeps =
-          import ./haclDeps.nix { inherit pkgs fstar-src karamel-src; };
-        haclPackages = haclDeps // { inherit (hacl.packages.${system}) hacl; };
-      in rec {
-        packages = haclPackages // { default = haclPackages.hacl; };
+        haclPackages = {
+          inherit (hacl.packages.${system}) z3 fstar karamel vale hacl;
+        };
+      in {
+        packages = haclPackages;
         hydraJobs = haclPackages;
       });
 }
