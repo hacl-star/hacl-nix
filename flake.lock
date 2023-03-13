@@ -49,11 +49,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1678019549,
-        "narHash": "sha256-TWym/lTC22Y9rXKZZqpN/RR+UzcY2ftcxrc1+uNogkM=",
+        "lastModified": 1678668393,
+        "narHash": "sha256-HFgqm36s2n5PFJMvJHS4FVlgWwuZLlWEPoQo7u3ARQo=",
         "owner": "hacl-star",
         "repo": "hacl-star",
-        "rev": "5ea164d21c553bd3703ed31be9163ad66c2ba0d9",
+        "rev": "a08faf9d03048d2434e0f058b9bb4b40b2173812",
         "type": "github"
       },
       "original": {
