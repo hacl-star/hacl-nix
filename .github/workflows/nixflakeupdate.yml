@@ -7,10 +7,8 @@ on:
 
 jobs:
   nix-flake-update:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-      - name: install nix
-        uses: cachix/install-nix-action@v15
       - name: checkout
         uses: actions/checkout@v3
       - name: update flake.lock
@@ -21,8 +19,8 @@ jobs:
           git config --local user.email "hacl-star@mailo.com"
           git add flake.lock
           git commit -m "[CI] update flake.lock"
+          nix build .#hacl
       - name: push
         uses: ad-m/github-push-action@master
         with:
-          branch: update-flake-lock
-          force: true
+          branch: main
