@@ -78,11 +78,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1697737108,
-        "narHash": "sha256-jTgkMVh0x94xCSJj8GYGcL+Kl7UDXH7nHy5BkE6qQZE=",
+        "lastModified": 1697816968,
+        "narHash": "sha256-6Q0gXBxrkIj/fKBAndbbvJgFrSzxodEolR6r4XLYix0=",
         "owner": "fstarlang",
         "repo": "karamel",
-        "rev": "8e1173bada30b8e6c0064cff848694b74f6705ab",
+        "rev": "32dff9380699016df4b8e8cc82fc60edda78549e",
         "type": "github"
       },
       "original": {
