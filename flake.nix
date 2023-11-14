@@ -12,7 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hacl = {
-      url = "github:hacl-star/hacl-star";
+      url = "github:hacl-star/hacl-star/pnmadelaine-api";
       inputs = {
         fstar.follows = "fstar";
         flake-utils.follows = "flake-utils";

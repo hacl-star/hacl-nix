@@ -52,15 +52,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1699634660,
-        "narHash": "sha256-/mAi8wdlO1HHYKVj8pN/y5FUM/AwVPNazYFSy9pDlpY=",
+        "lastModified": 1699977350,
+        "narHash": "sha256-ElIvzKFYEDIQQxNIwGJjcWyNpwYT9uHWxcP2gmc0QR4=",
         "owner": "hacl-star",
         "repo": "hacl-star",
-        "rev": "7f42aba60b37bc011d19472284bfcd3b95c1538e",
+        "rev": "39c554597f49553324686bb8bcaa1e4b1ab12d15",
         "type": "github"
       },
       "original": {
         "owner": "hacl-star",
+        "ref": "pnmadelaine-api",
         "repo": "hacl-star",
         "type": "github"
       }
