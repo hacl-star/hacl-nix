@@ -1,0 +1,10 @@
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  nix:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - run: nix build -L .#hacl
