@@ -23,11 +23,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1714534229,
-        "narHash": "sha256-CUm5PnZxt60nGFbDxhsENct2x8dAQFfDNdz4bo7nl7M=",
+        "lastModified": 1714785465,
+        "narHash": "sha256-a6iPzEG+hMuDgfvItin8xEf8fno9lEcQhGPILkYYkzg=",
         "owner": "fstarlang",
         "repo": "fstar",
-        "rev": "b332ac1e7a608ace65ae9f16064e5303509f5324",
+        "rev": "bb9e55a2bf04feef4a26b7f8bdc69fc5e595dc57",
         "type": "github"
       },
       "original": {
@@ -52,11 +52,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1714664160,
-        "narHash": "sha256-6jeaZLmtbBEP6pA1+l23pToN7s0i7oTx1Df5x3IyelU=",
+        "lastModified": 1714999806,
+        "narHash": "sha256-WZNcpLtm0INMvDJkE75FNCIraXH6lHdvW2m+IrsADUk=",
         "owner": "hacl-star",
         "repo": "hacl-star",
-        "rev": "7b512ae14b92a359a1031a73d6491cd76b7cc471",
+        "rev": "9109b711e7d24e9e0f35967180025597a23fcb43",
         "type": "github"
       },
       "original": {
