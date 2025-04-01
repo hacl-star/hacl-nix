@@ -23,11 +23,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1743368808,
-        "narHash": "sha256-vj8feGRBPArzeX970/Umz48jkvZbpouuBTuA1kpcli8=",
+        "lastModified": 1743441086,
+        "narHash": "sha256-N17vE2QlzipVT1cKIv745dAzBHHJEvmEWlQmQKQrkww=",
         "owner": "fstarlang",
         "repo": "fstar",
-        "rev": "156b465a76411f9be8efc333b105b76fdf9e0614",
+        "rev": "17d21d6d1a482f2176b236c78340bfdcff42e53f",
         "type": "github"
       },
       "original": {
